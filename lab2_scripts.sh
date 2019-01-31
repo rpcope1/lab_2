@@ -16,7 +16,7 @@ error()
 }
 
 main(){
-    if [[ $# -lt 1 ]]; then
+    if [[ $# -ne 1 ]]; then
         error "Required command line parameters: [final_regex]"
     fi
     FINAL_REGEX=$1
@@ -29,8 +29,11 @@ main(){
     if [[ ! -f ${readFile} ]] ; then
         error "File ${readFile} does not exist! Aborting..."
     fi
-    grep -E "${regularExpression}" "${readFile}" > ${outputFile}
-    
+    if [[ ${outputFile} = "-" ]]; then
+        grep -E "${regularExpression}" "${readFile}"
+    else
+        grep -E "${regularExpression}" "${readFile}" > ${outputFile}
+    fi
     echo "Scanning ${SEARCH_FILE}..."
     NUM_PHONE_NUMBERS=$(grep -E "${PHONE_NUMBER_REGEX}" "${SEARCH_FILE}" | wc -l)
     echo "Number of phone numbers: ${NUM_PHONE_NUMBERS}"
@@ -39,8 +42,8 @@ main(){
     echo "Finding 303 area code phone numbers..."
     grep -P "${THREE_OH_THREE_REGEX}" "${SEARCH_FILE}" > phone_results.txt
     echo "Finding non-geocities emails..."
-    echo "$(grep -P "${EMAIL_REGEX}" "${SEARCH_FILE}" | grep -r -P "${GEOCITIES_EMAIL_REGEX}")" > email_results.txt
+    grep -P "${EMAIL_REGEX}" "${SEARCH_FILE}" | grep -v -P "${GEOCITIES_EMAIL_REGEX}" "-" > email_results.txt
     grep -E "${FINAL_REGEX}" "${SEARCH_FILE}" > command_results.txt
 }
 
-main
+main $@
