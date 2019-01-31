@@ -29,7 +29,7 @@ main(){
     if [[ ! -f ${readFile} ]] ; then
         error "File ${readFile} does not exist! Aborting..."
     fi
-    grep -E "${regularExpression}" "${targetFile}" > ${outputFile}
+    grep -E "${regularExpression}" "${readFile}" > ${outputFile}
     
     echo "Scanning ${SEARCH_FILE}..."
     NUM_PHONE_NUMBERS=$(grep -E "${PHONE_NUMBER_REGEX}" "${SEARCH_FILE}" | wc -l)
