@@ -4,9 +4,14 @@
 set -eu
 
 SEARCH_FILE="regex_practice.txt"
-PHONE_NUMBER_REGEX="^(\(([0-9]{3})\)|([0-9]{3}))?\-?([0-9]{3})\-?([0-9]{4})$"
-EMAIL_REGEX="^\S+\@[0-9A-z]+(\.[0-9A-z]+)+$"
-THREE_OH_THREE_REGEX="^(\(303\)|303)?\-?([0-9]{3})\-?([0-9]{4})$"
+# Assume that a well formed phone number is of the form XXX-XXX-XXXX or (XXX)-XXX-XXXX
+# and has ten digits
+PHONE_NUMBER_REGEX="^(\(([0-9]{3})\)|([0-9]{3}))\-?([0-9]{3})\-?([0-9]{4})$"
+# Alternatively we could allow omission of the area code
+ALT_PHONE_NUMBER_REGEX="^(\(([0-9]{3})\)|([0-9]{3}))?\-?([0-9]{3})\-?([0-9]{4})$"
+THREE_OH_THREE_REGEX="^(\(303\)|303)\-?([0-9]{3})\-?([0-9]{4})$"
+
+EMAIL_REGEX="^\S+\@[0-9A-z\-]+(\.[0-9A-z\-]+)+$"
 GEOCITIES_EMAIL_REGEX="^\S+\@geocities\.com$"
 
 error()
@@ -24,16 +29,10 @@ main(){
     read regularExpression
     echo "Enter a file to scan: "
     read readFile
-    echo "Enter a file to write to: "
-    read outputFile
     if [[ ! -f ${readFile} ]] ; then
         error "File ${readFile} does not exist! Aborting..."
     fi
-    if [[ ${outputFile} = "-" ]]; then
-        grep -E "${regularExpression}" "${readFile}"
-    else
-        grep -E "${regularExpression}" "${readFile}" > ${outputFile}
-    fi
+    grep -E "${regularExpression}" "${readFile}"
     echo "Scanning ${SEARCH_FILE}..."
     NUM_PHONE_NUMBERS=$(grep -E "${PHONE_NUMBER_REGEX}" "${SEARCH_FILE}" | wc -l)
     echo "Number of phone numbers: ${NUM_PHONE_NUMBERS}"
