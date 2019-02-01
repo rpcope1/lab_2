@@ -6,7 +6,7 @@ set -eu
 SEARCH_FILE="regex_practice.txt"
 # Assume that a well formed phone number is of the form XXX-XXX-XXXX or (XXX)-XXX-XXXX
 # and has ten digits
-PHONE_NUMBER_REGEX="^(\(([0-9]{3})\)|([0-9]{3}))\-?([0-9]{3})\-?([0-9]{4})$"
+PHONE_NUMBER_REGEX="^(\(([0-9]{3})\)|([0-9]{3}))\-([0-9]{3})\-([0-9]{4})$"
 # Alternatively we could allow omission of the area code
 ALT_PHONE_NUMBER_REGEX="^(\(([0-9]{3})\)|([0-9]{3}))?\-?([0-9]{3})\-?([0-9]{4})$"
 THREE_OH_THREE_REGEX="^(\(303\)|303)\-?([0-9]{3})\-?([0-9]{4})$"
